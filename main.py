@@ -39,7 +39,7 @@ def main(context):
         suggestions = response.choices[0]
         context.log(suggestions)
         
-        return context.res.json({"recipes": suggestions})
+        return context.res.json({"recipes": suggestions.content})
     except Exception as e:
         context.log(e)
         return context.res.json({"error": str(e)})
