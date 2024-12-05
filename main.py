@@ -27,7 +27,7 @@ def main(context):
                         {
                             "type": "image_url",
                             "image_url": {
-                                "url": f"data:image/jpeg;base64,{image_data}",
+                                "url": image_data,
                                 "detail": "low",
                             },
                         }
