@@ -36,9 +36,7 @@ def main(context):
             ],
         )
 
-        suggestions = response.get("choices", [{}])[0].get(
-            "text", "No suggestions available"
-        )
+        suggestions = response.choices[0]
 
         return context.res.json({"recipes": suggestions})
     except Exception as e:
