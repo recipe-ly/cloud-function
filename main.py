@@ -42,4 +42,4 @@ def main(context):
 
         return context.res.json({"recipes": suggestions})
     except Exception as e:
-        return context.res.json({"error": str(e)}, status_code=500)
+        return context.res.json({"error": str(e)})
