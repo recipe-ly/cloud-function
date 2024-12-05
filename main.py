@@ -12,7 +12,7 @@ def main(context):
         return context.res.json({"error": "No image provided"}, status_code=400)
 
     try:
-        image_data = context.req.body.decode()
+        image_data = context.req.body
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
