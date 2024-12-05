@@ -1,9 +1,12 @@
 import openai
 import base64
 import json
+import os
+
+
 
 def main(context):
-    openai.api_key = context.env['OPENAI_API_KEY']
+    openai.api_key = os.env['OPENAI_API_KEY']
 
     if not context.req.body:
         return context.res.json({"error": "No image provided"}, status_code=400)
