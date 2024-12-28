@@ -53,7 +53,7 @@ def main(context):
         image_data = context.req.body
 
         response = client.beta.chat.completions.parse(
-            model="gpt-4o-mini",
+            model=os.environ["OPENAI_MODEL"],
             messages=[
                 {
                     "role": "system",
