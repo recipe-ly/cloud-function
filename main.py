@@ -14,10 +14,8 @@ class IngredientsList(BaseModel):
 
 
 def main(context):
-
-    base_url =  os.environ["API_URL"] or "https://api.openai.com/v1"
     
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"], base_url=base_url)
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     if not context.req.body:
         return context.res.json({"error": "No image provided"}, status_code=400)
