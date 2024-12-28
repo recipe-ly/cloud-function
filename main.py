@@ -1,3 +1,4 @@
+from typing import Optional
 from openai import OpenAI
 import base64
 import os
@@ -16,11 +17,24 @@ class Unit(Enum):
     POUND = "lb"
     PIECE = "pcs"
 
+class IngredientType(Enum):
+    fruit = "fruit"
+    vegetable = "vegetable"
+    spice = "spice"
+    legume = "legume"
+    herb = "herb"
+    grain = "grain"
+    nut = "nut"
+    dairy = "dairy"
+    meat = "meat"
+    seafood = "seafood"
+    oil = "oil"
+
 
 class Ingredient(BaseModel):
-    name: str
+    name: Optional[str]
     product: str
-    type: str
+    type: IngredientType
     amount: int
     unit: Unit
 
@@ -43,10 +57,14 @@ def main(context):
             messages=[
                 {
                     "role": "system",
-                    "content": """You are an ingredient analyzer. Check the follow picture and return the list of ingredients based on everything you can see on the picture, i want you to return all the products, fruits and vegetables.
-i want you want to return everything in the structure of a json list of ingredients. Each Ingredient should have a name, product, type, amount and unit. the name will be the label it has on it if any,
-the product should be a simple name of what that ingredient is like is it pea or precisely what that item is this needs to precise, in the case of spices please return a coma separated list of all the spices that the one in the picture might match.
-for the amount, please return a number, and unit return one from the standard units. please make sure to accurately get the type of the item to the precise thing it is.""",
+                    "content": """You are an ingredient analyzer. Review the following picture and return a list of ingredients based on everything you can identify in the image, focusing only on products, fruits, and vegetables.
+For each ingredient, return a JSON list with the following fields:
+name: The label or any specific identifier visible on the ingredient (if applicable).
+product: A precise description of what the ingredient is (e.g., "pea," "apple," or "carrot"). Avoid any brand names.
+type: The category of the ingredient (e.g., "fruit," "vegetable," "spice," etc.).
+amount: The numeric quantity of the ingredient if visible or estimable.
+unit: The standard unit of measurement (e.g., "grams," "kilograms," "pieces," "cups," etc.).
+If you encounter spices, return a comma-separated list of all spices that the ingredient might correspond to. Please make sure to identify each item with accuracy, providing its exact type and form as seen in the image.""",
                 },
                 {
                     "role": "user",
