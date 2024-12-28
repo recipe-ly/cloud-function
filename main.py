@@ -28,10 +28,7 @@ def main(context):
             messages=[
                 {
                     "role": "system",
-                    "content": """You are an ingredient analyzer. Check the follow picture and return the list of ingredients based on everything you can see on the picture, i want you to return all the products, fruits and vegetables.
-i want you want to return everything in the structure of a json list of ingredients. Each Ingredient should have a name, type, amount and unit. the name will be the label it has on it if any,
-the type should be a simple name of what that ingredient is like is it pea or is some type of meat, in the case of spices please return a coma separated list of all the spices that the one in the picture might match.
-for the amount, please return a number, and unit return one from the standard units""",
+                    "content": os.environ["INGREDIENTS_PROMPT"],
                 },
                 {
                     "role": "user",
