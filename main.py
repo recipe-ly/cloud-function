@@ -25,7 +25,7 @@ def main(context):
     try:
         image_data = context.req.body
 
-        response = client.chat.completions.create(
+        response = client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=[
                 {
@@ -56,7 +56,7 @@ for the amount, please return a number, and unit return one from the standard un
         suggestions = response.choices[0]
         context.log(suggestions)
         
-        return context.res.json({"recipes": suggestions.content})
+        return context.res.json({"recipes": suggestions.message.parsed})
     except Exception as e:
         context.log(e)
         return context.res.json({"error": str(e)})
