@@ -5,6 +5,7 @@ import os
 from pydantic import BaseModel
 from enum import Enum
 
+
 class Unit(Enum):
     GRAM = "g"
     KILOGRAM = "kg"
@@ -16,6 +17,7 @@ class Unit(Enum):
     OUNCE = "oz"
     POUND = "lb"
     PIECE = "pcs"
+
 
 class IngredientType(Enum):
     fruit = "fruit"
@@ -38,12 +40,13 @@ class Ingredient(BaseModel):
     amount: int
     unit: Unit
 
+
 class IngredientsList(BaseModel):
     ingredients: list[Ingredient]
 
 
 def main(context):
-    
+
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     if not context.req.body:
@@ -80,14 +83,13 @@ If you encounter spices, return a comma-separated list of all spices that the in
                 },
             ],
             response_format=IngredientsList,
-            temperature=0.0
-
+            temperature=0.0,
         )
 
         suggestions = response.choices[0]
         context.log(suggestions)
-        
-        return context.res.json({"recipes": suggestions.message.parsed.dict()})
+
+        return context.res.json({"recipes": suggestions.message.parsed.json()})
     except Exception as e:
         context.log(e)
         return context.res.json({"error": str(e)})
