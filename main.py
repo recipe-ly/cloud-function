@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from openai import OpenAI
 import base64
 import os
@@ -41,10 +41,6 @@ class Ingredient(BaseModel):
     unit: Unit
 
 
-class IngredientsList(BaseModel):
-    ingredients: list[Ingredient]
-
-
 def main(context):
 
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
@@ -82,14 +78,14 @@ If you encounter spices, return a comma-separated list of all spices that the in
                     ],
                 },
             ],
-            response_format=IngredientsList,
+            response_format=List[Ingredient],
             temperature=0.0,
         )
 
         suggestions = response.choices[0]
         context.log(suggestions)
 
-        return context.res.json(suggestions.message.parsed.json())
+        return context.res.json([s.__dict__ for s in suggestions.message.parsed])
     except Exception as e:
         context.log(e)
         return context.res.json({"error": str(e)})
