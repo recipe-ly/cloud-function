@@ -78,7 +78,7 @@ If you encounter spices, return a comma-separated list of all spices that the in
                     ],
                 },
             ],
-            response_format=List[Ingredient],
+            response_format=list[Ingredient],
             temperature=0.0,
         )
 
