@@ -44,7 +44,7 @@ class Ingredient(BaseModel):
 class IngredientsList(BaseModel):
     ingredients: list[Ingredient]
 
-def ingredients_recognition(context, client): 
+def get_ingredients(context, client): 
     if not context.req.body:
         return context.res.json({"error": "No image provided"}, status_code=400)
 
@@ -132,9 +132,9 @@ description: The description of how to perform the step.""",
 
 def main(context):
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-    if context.path == '/get/ingredients':
+    if context.req.path == '/get/ingredients':
         return get_ingredients(context, client)
-    if context.path == '/get/recipes':
+    if context.req.path == '/get/recipes':
         return get_recipes(context, client)
 
 
