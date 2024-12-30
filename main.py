@@ -87,9 +87,9 @@ If you encounter spices, return a comma-separated list of all spices that the in
         )
 
         suggestions = response.choices[0]
-        context.log(suggestions.message.parsed)
+        context.log(suggestions.message)
 
-        return context.res.json(suggestions.message.parsed)
+        return context.res.json(suggestions.message)
     except Exception as e:
         context.log(e)
         return context.res.json({"error": str(e)})
