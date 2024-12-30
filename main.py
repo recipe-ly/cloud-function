@@ -49,6 +49,7 @@ class RecipeStep(BaseModel):
     description: str
 
 class Recipe(BaseModel):
+    name: str
     ingredients: list[Ingredient]
     steps: list[RecipeStep]
 
@@ -116,6 +117,7 @@ type: The category of the ingredient (e.g., "fruit," "vegetable," "spice," etc.)
 amount: The numeric quantity of the ingredient if visible or estimable.
 unit: The standard unit of measurement (e.g., "grams," "kilograms," "pieces," "cups," etc.).
 For each step return a JSON list with the following fileds:
+name: If no name already exists generate one yourself.
 number: The step numbers counting from one.
 description: The description of how to perform the step.
 All fields are essential, please don't omit any."""
