@@ -44,11 +44,7 @@ class Ingredient(BaseModel):
 class IngredientsList(BaseModel):
     ingredients: list[Ingredient]
 
-
-def main(context):
-
-    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-
+def ingredients_recognition(context, client): 
     if not context.req.body:
         return context.res.json({"error": "No image provided"}, status_code=400)
 
@@ -93,3 +89,52 @@ If you encounter spices, return a comma-separated list of all spices that the in
     except Exception as e:
         context.log(e)
         return context.res.json({"error": str(e)})
+
+def get_recipes(context, client):
+    try:
+        ingredients_data = context.req.body
+
+        response = client.beta.chat.completions.parse(
+            model=os.environ["OPENAI_MODEL"],
+            messages=[
+                {
+                    "role": "system",
+                    "content": """You are a highly skilled and imaginative chef. I will provide you with a list of ingredients in JSON format, and your task is to create a unique, flavorful recipe using these ingredients. The recipe should be creative, well-structured, and easy to follow.  
+For each ingredient, return a JSON list with the following fields:
+name: The label or any specific identifier visible on the ingredient (if applicable).
+product: A precise description of what the ingredient is (e.g., "pea," "apple," or "carrot"). Avoid any brand names.
+type: The category of the ingredient (e.g., "fruit," "vegetable," "spice," etc.).
+amount: The numeric quantity of the ingredient if visible or estimable.
+unit: The standard unit of measurement (e.g., "grams," "kilograms," "pieces," "cups," etc.).
+For each step return a JSON list with the following fileds:
+number: The step numbers counting from one.
+description: The description of how to perform the step.""",
+                },
+                {
+                    "role": "user",
+                    "content": ingredients_data
+                },
+            ],
+            response_format=Recipe,
+            temperature=0.0,
+        )
+
+        suggestions = response.choices[0]
+        context.log(suggestions)
+
+        print(context.res.json(suggestions.message.parsed.json()))
+        return context.res.json(suggestions.message.parsed.json())
+    except Exception as e:
+        context.log(e)
+        return context.res.json({"error": str(e)})
+
+
+
+def main(context):
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    if context.path == '/get/ingredients':
+        return get_ingredients(context, client)
+    if context.path == '/get/recipes':
+        return get_recipes(context, client)
+
+
