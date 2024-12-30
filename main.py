@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from openai import OpenAI
 import base64
 import os
@@ -41,6 +41,10 @@ class Ingredient(BaseModel):
     unit: Unit
 
 
+class IngredientsList(BaseModel):
+    ingredients: list[Ingredient]
+
+
 def main(context):
 
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
@@ -78,7 +82,7 @@ If you encounter spices, return a comma-separated list of all spices that the in
                     ],
                 },
             ],
-            response_format=list[Ingredient],
+            response_format=IngredientsList,
             temperature=0.0,
         )
 
