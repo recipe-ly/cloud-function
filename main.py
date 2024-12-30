@@ -44,6 +44,11 @@ class Ingredient(BaseModel):
 class IngredientsList(BaseModel):
     ingredients: list[Ingredient]
 
+class Recipe(BaseModel):
+    ingredients: list[Ingredient]
+    steps: list[str]
+
+
 def get_ingredients(context, client): 
     if not context.req.body:
         return context.res.json({"error": "No image provided"}, status_code=400)
