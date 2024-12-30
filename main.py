@@ -44,9 +44,13 @@ class Ingredient(BaseModel):
 class IngredientsList(BaseModel):
     ingredients: list[Ingredient]
 
+class RecipeStep(BaseModel):
+    number: int
+    description: str
+
 class Recipe(BaseModel):
     ingredients: list[Ingredient]
-    steps: list[str]
+    steps: list[RecipeStep]
 
 
 def get_ingredients(context, client): 
@@ -113,7 +117,8 @@ amount: The numeric quantity of the ingredient if visible or estimable.
 unit: The standard unit of measurement (e.g., "grams," "kilograms," "pieces," "cups," etc.).
 For each step return a JSON list with the following fileds:
 number: The step numbers counting from one.
-description: The description of how to perform the step.""",
+description: The description of how to perform the step.
+All fields are essential, please don't omit any."""
                 },
                 {
                     "role": "user",
@@ -127,7 +132,6 @@ description: The description of how to perform the step.""",
         suggestions = response.choices[0]
         context.log(suggestions)
 
-        print(context.res.json(suggestions.message.parsed.json()))
         return context.res.json(suggestions.message.parsed.json())
     except Exception as e:
         context.log(e)
