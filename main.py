@@ -44,9 +44,11 @@ class Ingredient(BaseModel):
 class IngredientsList(BaseModel):
     ingredients: list[Ingredient]
 
+
 class RecipeStep(BaseModel):
     number: int
     description: str
+
 
 class Recipe(BaseModel):
     name: str
@@ -54,7 +56,11 @@ class Recipe(BaseModel):
     steps: list[RecipeStep]
 
 
-def get_ingredients(context, client): 
+class RecipeList(BaseModel):
+    recipes: list[Recipe]
+
+
+def get_ingredients(context, client):
     if not context.req.body:
         return context.res.json({"error": "No image provided"}, status_code=400)
 
@@ -100,6 +106,7 @@ If you encounter spices, return a comma-separated list of all spices that the in
         context.log(e)
         return context.res.json({"error": str(e)})
 
+
 def get_recipes(context, client):
     try:
         ingredients_data = context.req.body
@@ -120,14 +127,12 @@ For each step return a JSON list with the following fileds:
 name: If no name already exists generate one yourself.
 number: The step numbers counting from one.
 description: The description of how to perform the step.
-All fields are essential, please don't omit any."""
+All fields are essential, please don't omit any.
+Create for me a list of exactly 3 recipes using the provided ingredients.""",
                 },
-                {
-                    "role": "user",
-                    "content": ingredients_data
-                },
+                {"role": "user", "content": ingredients_data},
             ],
-            response_format=Recipe,
+            response_format=RecipeList,
             temperature=0.0,
         )
 
@@ -140,12 +145,9 @@ All fields are essential, please don't omit any."""
         return context.res.json({"error": str(e)})
 
 
-
 def main(context):
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-    if context.req.path == '/get/ingredients':
+    if context.req.path == "/get/ingredients":
         return get_ingredients(context, client)
-    if context.req.path == '/get/recipes':
+    if context.req.path == "/get/recipes":
         return get_recipes(context, client)
-
-
