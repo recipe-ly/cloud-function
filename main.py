@@ -54,6 +54,7 @@ class Recipe(BaseModel):
     name: str
     ingredients: list[Ingredient]
     steps: list[RecipeStep]
+    preparationTime: int
 
 
 class RecipeList(BaseModel):
@@ -123,7 +124,7 @@ For each step return a JSON list with the following fields:
 name: If no name already exists generate one yourself.
 number: The step numbers counting from one.
 description: The description of how to perform the step.
-All fields are essential, please don't omit any.
+All fields are essential, please don't omit any. Please also for each recipe include an estimated preparation time in minutes.
 """,
                 },
                 {"role": "user", "content": ingredients_data},
