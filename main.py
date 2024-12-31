@@ -116,19 +116,15 @@ def get_recipes(context, client):
             messages=[
                 {
                     "role": "system",
-                    "content": """You are a highly skilled and imaginative chef. I will provide you with a list of ingredients in JSON format, and your task is to create a unique, flavorful recipe using these ingredients. The recipe should be creative, well-structured, and easy to follow.  
-For each ingredient, return a JSON list with the following fields:
-name: The label or any specific identifier visible on the ingredient (if applicable).
-product: A precise description of what the ingredient is (e.g., "pea," "apple," or "carrot"). Avoid any brand names.
-type: The category of the ingredient (e.g., "fruit," "vegetable," "spice," etc.).
-amount: The numeric quantity of the ingredient if visible or estimable.
-unit: The standard unit of measurement (e.g., "grams," "kilograms," "pieces," "cups," etc.).
-For each step return a JSON list with the following fileds:
+                    "content": """You are a highly skilled and imaginative chef. I will provide you with a list of ingredients in JSON format, and your task is to create 3 unique, flavorful and different recipes using these ingredients. The recipes should be creative, well-structured, and easy to follow.  
+For each ingredient, return a JSON list:
+For each recipe return a JSON list with the following fields:
+For each step return a JSON list with the following fields:
 name: If no name already exists generate one yourself.
 number: The step numbers counting from one.
 description: The description of how to perform the step.
 All fields are essential, please don't omit any.
-Create for me a list of exactly 3 recipes using the provided ingredients.""",
+""",
                 },
                 {"role": "user", "content": ingredients_data},
             ],
